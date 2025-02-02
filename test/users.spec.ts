@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it, beforeEach } from "vitest";
 import supertest from "supertest";
 import { app } from "../src/app";
 import { knex } from "../src/database";
-import { resetDatabase } from "./helper";
+import { execSync } from "node:child_process";
 
 const api = supertest(app.server);
 
@@ -16,7 +16,8 @@ describe("Users routes", () => {
     });
 
     beforeEach(() => {
-        resetDatabase();
+        execSync("npm run knex -- migrate:rollback --all");
+        execSync("npm run knex -- migrate:latest");
     });
 
     it("should be able to create new user", async () => {

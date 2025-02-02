@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import supertest from "supertest";
 import { app } from "../src/app";
-import { resetDatabase } from "./helper";
+import { execSync } from "node:child_process";
 import { knex } from "../src/database";
 
 const api = supertest(app.server);
@@ -16,7 +16,8 @@ describe("Melas routes", () => {
     });
 
     beforeEach(async () => {
-        resetDatabase();
+        execSync("npm run knex -- migrate:rollback --all");
+        execSync("npm run knex -- migrate:latest");
         await api
             .post("/users")
             .send({

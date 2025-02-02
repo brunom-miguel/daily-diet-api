@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, it, beforeEach, expect } from "vitest";
 import supertest from "supertest";
 import { app } from "../src/app";
-import { resetDatabase } from "./helper";
+import { execSync } from "node:child_process";
 
 const api = supertest(app.server);
 
@@ -15,7 +15,8 @@ describe("Token routes", () => {
     });
 
     beforeEach(async () => {
-        resetDatabase();
+        execSync("npm run knex -- migrate:rollback --all");
+        execSync("npm run knex -- migrate:latest");
         await api
             .post("/users")
             .send({
