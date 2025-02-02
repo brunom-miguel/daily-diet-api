@@ -1,0 +1,9 @@
+# dependencies
+node_modules
+
+# database
+db/*.db
+
+# environments
+.env
+.env.test
